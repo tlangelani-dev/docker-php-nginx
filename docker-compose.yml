@@ -11,6 +11,7 @@ services:
             - "8088:80"
         volumes:
             - ./src:/var/www/html
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - php
             - mysql
@@ -28,10 +29,22 @@ services:
             - ./mysql:/var/lib/mysql
         environment:
             MYSQL_DATABASE: homestead
-            MYSQL_USER
+            MYSQL_USER: tlangelani
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
         networks: 
             - laravel
 
     php:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        container_name: php-c
+        volumes: 
+            - ./src:/var/html/html
+        ports: 
+            - "9000:9000"
         networks: 
             - laravel
