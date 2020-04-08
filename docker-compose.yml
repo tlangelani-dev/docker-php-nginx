@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+    laravel: 
+
+services:
+    nginx:
+        image: nginx:stable-alpine
+        container_name: nginx-c
+        ports:
+            - "8088:80"
+        volumes:
+            - ./src:/var/www/html
+        depends_on:
+            - php
+            - mysql
+        networks: 
+            - laravel
+
+    mysql:
+        image: mysql:5.7.22
+        container_name: mysql-c
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "4306:3306"
+        volumes:
+            - ./mysql:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: homestead
+            MYSQL_USER
+        networks: 
+            - laravel
+
+    php:
+        networks: 
+            - laravel
